@@ -1,5 +1,8 @@
 # EthSema - Binary translator for Ethereum 2.0
 
+>[!IMPORTANT]
+> This repo is just a mirroring of original code mentioned in [EVMBT](https://dl.acm.org/doi/abs/10.1145/3652032.3657570) paper. Refer to original paper and authors for further informations
+
 EthSema is a novel EVM-to-eWASM bytecode translator that can not only ensure the fidelity of translation but also fix commonly-seen vulnerabilities in smart contracts. 
 
 Since millions of smart contracts have been deployed and running on Ethereum 1.0, it is highly desirable to convert their EVM bytecode to eWASM bytecode automatically to foster the prosperity of Ethereum ecosystem. EthSema can translate existing EVM bytecode to eWASM smart contracts which can be executed in the [Ethereum 2.0 ecosystem](https://ethereum.org/en/upgrades/). To evaluate its performance, we download real-world contracts and their transactions from the Ethereum blockchain, replay them on our testnet, and compare the traces of the EVM transactions and eWASM transactions. The experimental demonstrate that EthSema can ensure the semantic correctness of the converted eWASM contracts. 
@@ -179,4 +182,16 @@ $ ./scripts/test.sh
 
 ## License
 
-[MIT](https://github.com/Kenun99/ethsema/blob/main/LICENSE)
+Thir repository is redistributed under [MIT](https://github.com/Kenun99/ethsema/blob/main/LICENSE) license.
+
+## References
+<details>
+  <summary>[PAPER] EVMBT: A Binary Translation Scheme for Upgrading EVM Smart Contracts to WASM</summary>
+Weimin Chen, Xiapu Luo, Haoyu Wang, Heming Cui, Shuyu Zheng, and Xuanzhe Liu. 2024. EVMBT: A Binary Translation Scheme for Upgrading EVM Smart Contracts to WASM. In Proceedings of the 25th ACM SIGPLAN/SIGBED International Conference on Languages, Compilers, and Tools for Embedded Systems (LCTES 2024). Association for Computing Machinery, New York, NY, USA, 131–142. https://doi.org/10.1145/3652032.3657570
+</details>
+
+<details>
+  <summary>[CODE] Hera | submodule in this repo</summary>
+https://github.com/Kenun99/hera
+</details>
+ 
