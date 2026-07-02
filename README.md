@@ -155,7 +155,7 @@ contract reEntrancy {
 We build a testnet with a [geth](https://github.com/Kenun99/go-ethereum) node, which uses [Hera](https://github.com/Kenun99/hera)  as the eWASM VM and maintains the compatibility to EVM. The geth equipped with dual interpreters can execute smart contracts in EVM bytecode or eWASM bytecode on our testnet via uniform interfaces. In our paper, we further extended Hera to support all Ethereum interfaces introduced from the latest “London” upgrade [62], such as CREATE2, SELFBALANCE, CHAINID, BASEFEE and COINBASE.  
 
 ```bash
-$ git clone https://github.com/Kenun99/ethsema.git && cd ethsema
+$ git clone https://github.com/owanesh/evmbt.git && cd evmbt
 $ docker build -t localhost/client-go:ewasm .
 $ ./scripts/ewasm.sh # run the ewasm node
 ```
