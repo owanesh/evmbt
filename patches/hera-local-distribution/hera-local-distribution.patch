@@ -1,0 +1,68 @@
+diff --git a/src/binaryen.cpp b/src/binaryen.cpp
+index c52906b..2a24360 100644
+--- a/src/binaryen.cpp
++++ b/src/binaryen.cpp
+@@ -472,6 +472,7 @@ private:
+       uint32_t resultOffset  = static_cast<uint32_t>(arguments[1].geti32());
+ 
+       eeiGetExternalCodeHash(addressOffset, resultOffset);
++      return wasm::Literal();
+     }
+ 
+ 
+@@ -505,7 +506,7 @@ private:
+       return wasm::Literal(eeiCreate2(valueOffset, dataOffset, length, saltOffset, resultOffset));
+     }
+ 
+-    heraAssert(false, string("Unsupported import called: ") + import->module.str + "::" + import->base.str + " (" + to_string(arguments.size()) + " arguments)");
++    heraAssert(false, string("????Unsupported import called: ") + import->module.str + "::" + import->base.str + " (" + to_string(arguments.size()) + " arguments)");
+   }
+ 
+ unique_ptr<WasmEngine> BinaryenEngine::create()
+@@ -666,7 +667,7 @@ void BinaryenEngine::verifyContract(wasm::Module & module)
+     { wasm::Name("selfDestruct"), createFunctionType({ wasm::Type::i32 }, wasm::Type::none) },
+ 
+     { wasm::Name("create2"), createFunctionType({ wasm::Type::i32, wasm::Type::i32, wasm::Type::i32, wasm::Type::i32, wasm::Type::i32 }, wasm::Type::i32) },
+-    { wasm::Name("getExternalCodeHash"), createFunctionType({ wasm::Type::i32, wasm::Type::i32}, wasm::Type::none) },
++    { wasm::Name("getExternalCodeHash"), createFunctionType({ wasm::Type::i32, wasm::Type::i32 }, wasm::Type::none) },
+     { wasm::Name("getChainID"), createFunctionType({}, wasm::Type::i64) },
+     { wasm::Name("getSelfBalance"), createFunctionType({ wasm::Type::i32}, wasm::Type::none) },
+     { wasm::Name("getBasefee"), createFunctionType({}, wasm::Type::i64) },
+@@ -716,11 +717,11 @@ void BinaryenEngine::verifyContract(wasm::Module & module)
+ 
+     wasm::FunctionType eei_function_type = eei_signatures.at(import->base);
+ 
+-    ensureCondition(
+-      function_type->structuralComparison(eei_function_type),
+-      ContractValidationFailure,
+-      "Imported function type mismatch."
+-    );
++    // ensureCondition(
++    //   function_type->structuralComparison(eei_function_type),
++    //   ContractValidationFailure,
++    //   "Imported function type mismatch."
++    // );
+   }
+ }
+ 
+diff --git a/src/eei.cpp b/src/eei.cpp
+index 5a2a585..c4abfcf 100644
+--- a/src/eei.cpp
++++ b/src/eei.cpp
+@@ -340,11 +340,11 @@ namespace hera {
+       std::ofstream logfp;
+       logfp.open("/txtracetmp", ios::app);  
+       logfp << "LOG: " << hex << dataOffset << " " << hex << length;
+-      for (uint32_t i = 0; i< numberOfTopics; i++) {
+-        logfp << " ";
+-        for (int j = 0;j < 32; j++)
+-          logfp << std::setfill('0') << setw(2) << hex << (int)(*(topics[i].bytes+j));
+-      }
++      //for (uint32_t i = 0; i< numberOfTopics; i++) {
++      //  logfp << " ";
++      //  for (int j = 0;j < 32; j++)
++      //    logfp << std::setfill('0') << setw(2) << hex << (int)(*(topics[i].bytes+j));
++      //}
+       logfp << "\n";
+       logfp.close();
+     
