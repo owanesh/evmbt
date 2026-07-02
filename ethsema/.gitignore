@@ -1,0 +1,24 @@
+# CMake build dir
+/build
+
+# IntelliJ
+/.idea
+/.vscode/
+
+
+# test file
+**/.tmp.hex
+**/.link.wasm
+**/.tmp.hex
+**/.tmp.bin
+**/.code_gen.wasm 
+**/res.wasm
+**/rt.ll
+**/res.ll
+**/runtime.wasm
+
+# python env
+/venv
+**/__pycache__
+# Vim swap files
+**/*.swp

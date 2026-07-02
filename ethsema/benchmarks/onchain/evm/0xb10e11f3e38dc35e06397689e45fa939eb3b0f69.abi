@@ -1,0 +1,1 @@
+[{"inputs": [], "stateMutability": "nonpayable", "type": "constructor"}, {"inputs": [], "name": "deployVault", "outputs": [{"internalType": "address", "name": "", "type": "address"}], "stateMutability": "nonpayable", "type": "function"}]

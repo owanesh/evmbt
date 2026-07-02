@@ -1,0 +1,989 @@
+
+======= ./contracts/arithmetic.sol:Math =======
+EVM assembly:
+    /* "./contracts/arithmetic.sol":0:989  contract Math {... */
+  mstore(0x40, 0x80)
+  callvalue
+    /* "--CODEGEN--":8:17   */
+  dup1
+    /* "--CODEGEN--":5:7   */
+  iszero
+  tag_1
+  jumpi
+    /* "--CODEGEN--":30:31   */
+  0x0
+    /* "--CODEGEN--":27:28   */
+  dup1
+    /* "--CODEGEN--":20:32   */
+  revert
+    /* "--CODEGEN--":5:7   */
+tag_1:
+    /* "./contracts/arithmetic.sol":0:989  contract Math {... */
+  pop
+  dataSize(sub_0)
+  dup1
+  dataOffset(sub_0)
+  0x0
+  codecopy
+  0x0
+  return
+stop
+
+sub_0: assembly {
+        /* "./contracts/arithmetic.sol":0:989  contract Math {... */
+      mstore(0x40, 0x80)
+      jumpi(tag_1, lt(calldatasize, 0x4))
+      calldataload(0x0)
+      0x100000000000000000000000000000000000000000000000000000000
+      swap1
+      div
+      0xffffffff
+      and
+      dup1
+      0x58a62bb
+      eq
+      tag_2
+      jumpi
+      dup1
+      0x74898e5
+      eq
+      tag_3
+      jumpi
+      dup1
+      0x2108a63e
+      eq
+      tag_4
+      jumpi
+      dup1
+      0x51f96924
+      eq
+      tag_5
+      jumpi
+      dup1
+      0x8c8497bc
+      eq
+      tag_6
+      jumpi
+      dup1
+      0x8d41c17d
+      eq
+      tag_7
+      jumpi
+      dup1
+      0x904d5ed8
+      eq
+      tag_8
+      jumpi
+      dup1
+      0xd8b87f2e
+      eq
+      tag_9
+      jumpi
+      dup1
+      0xd8d1bf0e
+      eq
+      tag_10
+      jumpi
+      dup1
+      0xda4ec0e6
+      eq
+      tag_11
+      jumpi
+    tag_1:
+      0x0
+      dup1
+      revert
+        /* "./contracts/arithmetic.sol":214:309  function subs256(int256 a, int256 b) public view returns(int256 ) {... */
+    tag_2:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_12
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_12:
+        /* "./contracts/arithmetic.sol":214:309  function subs256(int256 a, int256 b) public view returns(int256 ) {... */
+      pop
+      tag_13
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_14)
+    tag_13:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "./contracts/arithmetic.sol":697:792  function divs256(int256 a, int256 b) public view returns(int256 ) {... */
+    tag_3:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_15
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_15:
+        /* "./contracts/arithmetic.sol":697:792  function divs256(int256 a, int256 b) public view returns(int256 ) {... */
+      pop
+      tag_16
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_17)
+    tag_16:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "./contracts/arithmetic.sol":892:987  function muls256(int256 a, int256 b) public view returns(int256 ) {... */
+    tag_4:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_18
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_18:
+        /* "./contracts/arithmetic.sol":892:987  function muls256(int256 a, int256 b) public view returns(int256 ) {... */
+      pop
+      tag_19
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_20)
+    tag_19:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "./contracts/arithmetic.sol":603:692  function divu256(uint a, uint b) public view returns(uint ) {... */
+    tag_5:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_21
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_21:
+        /* "./contracts/arithmetic.sol":603:692  function divu256(uint a, uint b) public view returns(uint ) {... */
+      pop
+      tag_22
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_23)
+    tag_22:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "./contracts/arithmetic.sol":315:402  function subs8(int8 a, int8 b) public view returns(int8 ) {... */
+    tag_6:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_24
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_24:
+        /* "./contracts/arithmetic.sol":315:402  function subs8(int8 a, int8 b) public view returns(int8 ) {... */
+      pop
+      tag_25
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0x0
+      signextend
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      0x0
+      signextend
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_26)
+    tag_25:
+      mload(0x40)
+      dup1
+      dup3
+      0x0
+      signextend
+      0x0
+      signextend
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "./contracts/arithmetic.sol":408:497  function addu256(uint a, uint b) public view returns(uint ) {... */
+    tag_7:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_27
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_27:
+        /* "./contracts/arithmetic.sol":408:497  function addu256(uint a, uint b) public view returns(uint ) {... */
+      pop
+      tag_28
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_29)
+    tag_28:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "./contracts/arithmetic.sol":798:887  function mulu256(uint a, uint b) public view returns(uint ) {... */
+    tag_8:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_30
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_30:
+        /* "./contracts/arithmetic.sol":798:887  function mulu256(uint a, uint b) public view returns(uint ) {... */
+      pop
+      tag_31
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_32)
+    tag_31:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "./contracts/arithmetic.sol":24:113  function subu256(uint a, uint b) public view returns(uint ) {... */
+    tag_9:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_33
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_33:
+        /* "./contracts/arithmetic.sol":24:113  function subu256(uint a, uint b) public view returns(uint ) {... */
+      pop
+      tag_34
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_35)
+    tag_34:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "./contracts/arithmetic.sol":502:597  function adds256(int256 a, int256 b) public view returns(int256 ) {... */
+    tag_10:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_36
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_36:
+        /* "./contracts/arithmetic.sol":502:597  function adds256(int256 a, int256 b) public view returns(int256 ) {... */
+      pop
+      tag_37
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_38)
+    tag_37:
+      mload(0x40)
+      dup1
+      dup3
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "./contracts/arithmetic.sol":118:208  function subu8(uint8 a, uint8 b) public view returns(uint8 ) {... */
+    tag_11:
+      callvalue
+        /* "--CODEGEN--":8:17   */
+      dup1
+        /* "--CODEGEN--":5:7   */
+      iszero
+      tag_39
+      jumpi
+        /* "--CODEGEN--":30:31   */
+      0x0
+        /* "--CODEGEN--":27:28   */
+      dup1
+        /* "--CODEGEN--":20:32   */
+      revert
+        /* "--CODEGEN--":5:7   */
+    tag_39:
+        /* "./contracts/arithmetic.sol":118:208  function subu8(uint8 a, uint8 b) public view returns(uint8 ) {... */
+      pop
+      tag_40
+      0x4
+      dup1
+      calldatasize
+      sub
+      dup2
+      add
+      swap1
+      dup1
+      dup1
+      calldataload
+      0xff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      dup1
+      calldataload
+      0xff
+      and
+      swap1
+      0x20
+      add
+      swap1
+      swap3
+      swap2
+      swap1
+      pop
+      pop
+      pop
+      jump(tag_41)
+    tag_40:
+      mload(0x40)
+      dup1
+      dup3
+      0xff
+      and
+      0xff
+      and
+      dup2
+      mstore
+      0x20
+      add
+      swap2
+      pop
+      pop
+      mload(0x40)
+      dup1
+      swap2
+      sub
+      swap1
+      return
+        /* "./contracts/arithmetic.sol":214:309  function subs256(int256 a, int256 b) public view returns(int256 ) {... */
+    tag_14:
+        /* "./contracts/arithmetic.sol":271:277  int256 */
+      0x0
+        /* "./contracts/arithmetic.sol":301:302  b */
+      dup2
+        /* "./contracts/arithmetic.sol":297:298  a */
+      dup4
+        /* "./contracts/arithmetic.sol":297:302  a - b */
+      sub
+        /* "./contracts/arithmetic.sol":290:302  return a - b */
+      swap1
+      pop
+        /* "./contracts/arithmetic.sol":214:309  function subs256(int256 a, int256 b) public view returns(int256 ) {... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "./contracts/arithmetic.sol":697:792  function divs256(int256 a, int256 b) public view returns(int256 ) {... */
+    tag_17:
+        /* "./contracts/arithmetic.sol":754:760  int256 */
+      0x0
+        /* "./contracts/arithmetic.sol":784:785  b */
+      dup2
+        /* "./contracts/arithmetic.sol":780:781  a */
+      dup4
+        /* "./contracts/arithmetic.sol":780:785  a / b */
+      dup2
+      iszero
+      iszero
+      tag_44
+      jumpi
+      invalid
+    tag_44:
+      sdiv
+        /* "./contracts/arithmetic.sol":773:785  return a / b */
+      swap1
+      pop
+        /* "./contracts/arithmetic.sol":697:792  function divs256(int256 a, int256 b) public view returns(int256 ) {... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "./contracts/arithmetic.sol":892:987  function muls256(int256 a, int256 b) public view returns(int256 ) {... */
+    tag_20:
+        /* "./contracts/arithmetic.sol":949:955  int256 */
+      0x0
+        /* "./contracts/arithmetic.sol":979:980  b */
+      dup2
+        /* "./contracts/arithmetic.sol":975:976  a */
+      dup4
+        /* "./contracts/arithmetic.sol":975:980  a * b */
+      mul
+        /* "./contracts/arithmetic.sol":968:980  return a * b */
+      swap1
+      pop
+        /* "./contracts/arithmetic.sol":892:987  function muls256(int256 a, int256 b) public view returns(int256 ) {... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "./contracts/arithmetic.sol":603:692  function divu256(uint a, uint b) public view returns(uint ) {... */
+    tag_23:
+        /* "./contracts/arithmetic.sol":656:660  uint */
+      0x0
+        /* "./contracts/arithmetic.sol":684:685  b */
+      dup2
+        /* "./contracts/arithmetic.sol":680:681  a */
+      dup4
+        /* "./contracts/arithmetic.sol":680:685  a / b */
+      dup2
+      iszero
+      iszero
+      tag_47
+      jumpi
+      invalid
+    tag_47:
+      div
+        /* "./contracts/arithmetic.sol":673:685  return a / b */
+      swap1
+      pop
+        /* "./contracts/arithmetic.sol":603:692  function divu256(uint a, uint b) public view returns(uint ) {... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "./contracts/arithmetic.sol":315:402  function subs8(int8 a, int8 b) public view returns(int8 ) {... */
+    tag_26:
+        /* "./contracts/arithmetic.sol":366:370  int8 */
+      0x0
+        /* "./contracts/arithmetic.sol":394:395  b */
+      dup2
+        /* "./contracts/arithmetic.sol":390:391  a */
+      dup4
+        /* "./contracts/arithmetic.sol":390:395  a - b */
+      sub
+        /* "./contracts/arithmetic.sol":383:395  return a - b */
+      swap1
+      pop
+        /* "./contracts/arithmetic.sol":315:402  function subs8(int8 a, int8 b) public view returns(int8 ) {... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "./contracts/arithmetic.sol":408:497  function addu256(uint a, uint b) public view returns(uint ) {... */
+    tag_29:
+        /* "./contracts/arithmetic.sol":461:465  uint */
+      0x0
+        /* "./contracts/arithmetic.sol":489:490  b */
+      dup2
+        /* "./contracts/arithmetic.sol":485:486  a */
+      dup4
+        /* "./contracts/arithmetic.sol":485:490  a + b */
+      add
+        /* "./contracts/arithmetic.sol":478:490  return a + b */
+      swap1
+      pop
+        /* "./contracts/arithmetic.sol":408:497  function addu256(uint a, uint b) public view returns(uint ) {... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "./contracts/arithmetic.sol":798:887  function mulu256(uint a, uint b) public view returns(uint ) {... */
+    tag_32:
+        /* "./contracts/arithmetic.sol":851:855  uint */
+      0x0
+        /* "./contracts/arithmetic.sol":879:880  b */
+      dup2
+        /* "./contracts/arithmetic.sol":875:876  a */
+      dup4
+        /* "./contracts/arithmetic.sol":875:880  a * b */
+      mul
+        /* "./contracts/arithmetic.sol":868:880  return a * b */
+      swap1
+      pop
+        /* "./contracts/arithmetic.sol":798:887  function mulu256(uint a, uint b) public view returns(uint ) {... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "./contracts/arithmetic.sol":24:113  function subu256(uint a, uint b) public view returns(uint ) {... */
+    tag_35:
+        /* "./contracts/arithmetic.sol":77:81  uint */
+      0x0
+        /* "./contracts/arithmetic.sol":105:106  b */
+      dup2
+        /* "./contracts/arithmetic.sol":101:102  a */
+      dup4
+        /* "./contracts/arithmetic.sol":101:106  a - b */
+      sub
+        /* "./contracts/arithmetic.sol":94:106  return a - b */
+      swap1
+      pop
+        /* "./contracts/arithmetic.sol":24:113  function subu256(uint a, uint b) public view returns(uint ) {... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "./contracts/arithmetic.sol":502:597  function adds256(int256 a, int256 b) public view returns(int256 ) {... */
+    tag_38:
+        /* "./contracts/arithmetic.sol":559:565  int256 */
+      0x0
+        /* "./contracts/arithmetic.sol":589:590  b */
+      dup2
+        /* "./contracts/arithmetic.sol":585:586  a */
+      dup4
+        /* "./contracts/arithmetic.sol":585:590  a + b */
+      add
+        /* "./contracts/arithmetic.sol":578:590  return a + b */
+      swap1
+      pop
+        /* "./contracts/arithmetic.sol":502:597  function adds256(int256 a, int256 b) public view returns(int256 ) {... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+        /* "./contracts/arithmetic.sol":118:208  function subu8(uint8 a, uint8 b) public view returns(uint8 ) {... */
+    tag_41:
+        /* "./contracts/arithmetic.sol":171:176  uint8 */
+      0x0
+        /* "./contracts/arithmetic.sol":200:201  b */
+      dup2
+        /* "./contracts/arithmetic.sol":196:197  a */
+      dup4
+        /* "./contracts/arithmetic.sol":196:201  a - b */
+      sub
+        /* "./contracts/arithmetic.sol":189:201  return a - b */
+      swap1
+      pop
+        /* "./contracts/arithmetic.sol":118:208  function subu8(uint8 a, uint8 b) public view returns(uint8 ) {... */
+      swap3
+      swap2
+      pop
+      pop
+      jump	// out
+
+    auxdata: 0xa165627a7a723058204fa59442cf8834d463ab55b906f804dff108199ce5b3a5db82c590cf3b4c7c7f0029
+}
+

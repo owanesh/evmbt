@@ -1,0 +1,14 @@
+add,ADD
+builtin,BUILTIN
+div,DIV
+exp,EXP
+fib,FIB
+keccak256,KECCAK256
+matrix,MAT
+mod,MOD
+power,POWER
+sha256,SHA256
+shl,SHL
+shr,SHR
+sub,SUB
+warshall,WARSHALL
