@@ -30,17 +30,12 @@ public:
 
 	void compileMain(std::vector<uint8_t> &ExeCode, const std::string& Name);
 
+  void setRuntimeWasmCode(llvm::StringRef Code) {
+    RtWasmCode = Code;
+  }
+
   void FixEwasmDeployer(llvm::StringRef RtWasmCode) {
-    assert(EwasmRetCall && "Fail to identify the RETURN used to deploy Ewasm code");
-    auto Zero = llvm::ConstantInt::get(Type::Int32Ty, 0);
-
-    llvm::IRBuilder<> IRB(EwasmRetCall);
-    IRB.CreateGlobalStringPtr(RtWasmCode, "runtimeWasmCode");
-    llvm::Value *pStr = IRB.CreateGEP(
-      Module.getNamedGlobal("runtimeWasmCode"), {Zero, Zero});
-
-    // EwasmRetCall->setOperand(2, pStr);
-    // EwasmRetCall->setOperand(2, IRB.getInt32(RtWasmCode.size()));
+    setRuntimeWasmCode(RtWasmCode);
   }
 
 private:

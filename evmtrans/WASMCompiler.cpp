@@ -2340,16 +2340,12 @@ namespace dev
               index = IRB.CreateIntToPtr(index, Type::Int8PtrTy);
               size = IRB.CreateTruncOrBitCast(size, Type::Int32Ty);
               
-              if (RetPC && _basicBlock.firstInstrIdx() + it - _basicBlock.begin() == RetPC) {
+              if (RetPC && !RtWasmCode.empty() && _basicBlock.firstInstrIdx() + it - _basicBlock.begin() == RetPC) {
                 auto Zero = llvm::ConstantInt::get(Type::Int32Ty, 0);
-                IRB.CreateGlobalStringPtr(RtWasmCode, "runtimeWasmCode");
+                IRB.CreateGlobalStringPtr(RtWasmCode, "runtimeCode");
                 llvm::Value *pStr = IRB.CreateGEP(
-                  Module.getNamedGlobal("runtimeWasmCode"), {Zero, Zero});
-                IRB.CreateCall(_eei.Func_finish, {index, size});
-
-							  llvm::Value *pStr = IRB.CreateGlobalStringPtr(llvm::StringRef(str), "runtimeCode");
-							  IRB.CreateCall(_eei.Func_finish, {pStr, m_builder.getInt32(rtCodeSize)});
-
+                  Module.getNamedGlobal("runtimeCode"), {Zero, Zero});
+                IRB.CreateCall(_eei.Func_finish, {pStr, IRB.getInt32(static_cast<uint32_t>(RtWasmCode.size()))});
               } else {
                 IRB.CreateCall(_eei.Func_finish, {index, size});
               }
