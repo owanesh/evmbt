@@ -1,0 +1,21 @@
+services:
+  evmtrans:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile.evmtrans
+      args:
+        BUILD_PARALLEL_JOBS: ${BUILD_PARALLEL_JOBS:-4}
+    image: ethsema-evmtrans:local
+    profiles: ["evmtrans"]
+    volumes:
+      - ..:/work
+    working_dir: /work
+
+  full:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile.full
+      args:
+        BUILD_PARALLEL_JOBS: ${BUILD_PARALLEL_JOBS:-4}
+    image: ethsema-full:local
+    profiles: ["full"]
