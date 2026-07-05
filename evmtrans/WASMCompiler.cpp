@@ -708,7 +708,11 @@ namespace dev
 				{
 					uint8_t _;
 					for (_ = 0; _ < out; ++_)
+					{
+						if (stk->empty())
+							stk->push_back(0);
 						stk->pop_back();
+					}
 
 					for (_ = 0; _ < in; ++_)
 						stk->push_back(0);
@@ -769,7 +773,8 @@ namespace dev
 						// std::cerr << " activated \n";
 						if (ins == Instruction::POP)
 						{
-							stack.pop_back();
+							if (!stack.empty())
+								stack.pop_back();
 							// std::cerr << " pop \n";
 						}
 						else if (ins == Instruction::JUMP || ins == Instruction::JUMPI)
@@ -788,15 +793,20 @@ namespace dev
 					// DUPn (eg. DUP1: a b c -> a b c c, DUP3: a b c -> a b c a)
 					else if (Instruction::DUP1 <= ins && ins <= Instruction::DUP16)
 					{
-						stack.push_back(stack[stack.size() + 0x7f - opcode]); // 0x7f - opcode is a negative number, -1 for 0x80 ... -16 for 0x8f
+						auto depth = static_cast<size_t>(opcode - 0x7f);
+						stack.push_back(stack.size() >= depth ? stack[stack.size() - depth] : 0);
 					}
 					else if (Instruction::SWAP1 <= ins && ins <= Instruction::SWAP16)
 					{
 						// SWAPn (eg. SWAP1: a b c d -> a b d c, SWAP3: a b c d -> d b c a)
 						// 0x8e - opcode is a negative number, -2 for 0x90 ... -17 for 0x9f
-						uint64_t tmp = stack[stack.size() - 1];
-						stack[stack.size() - 1] = stack[stack.size() + 0x8e - opcode];
-						stack[stack.size() + 0x8e - opcode] = tmp;
+						auto depth = static_cast<size_t>(opcode - 0x8e);
+						if (stack.size() > depth)
+						{
+							uint64_t tmp = stack[stack.size() - 1];
+							stack[stack.size() - 1] = stack[stack.size() - depth - 1];
+							stack[stack.size() - depth - 1] = tmp;
+						}
 					}
 					else if (Instruction::LOG0 <= ins && ins <= Instruction::LOG4)
 					{
@@ -856,6 +866,12 @@ namespace dev
 					std::vector<uint64_t> *stk_ptr = dfs.back().second;
 					dfs.pop_back();
 
+					if (bb_ptr == nullptr)
+					{
+						delete stk_ptr;
+						continue;
+					}
+
 					// std::cerr << "BB# " << std::hex << " " << bb_ptr->firstInstrIdx() << "-";
 
 					// edges found
@@ -873,9 +889,11 @@ namespace dev
 
 					if (ternimator == Instruction::JUMP)
 					{
-						uint64_t jump_pc = stk_ptr->back();
-						stk_ptr->pop_back();
-						BasicBlock *next_bb = idxMap[jump_pc];
+						uint64_t jump_pc = stk_ptr->empty() ? 0 : stk_ptr->back();
+						if (!stk_ptr->empty())
+							stk_ptr->pop_back();
+						auto nextIt = idxMap.find(jump_pc);
+						BasicBlock *next_bb = nextIt == idxMap.end() ? nullptr : nextIt->second;
 						if (next_bb && Instruction(*next_bb->begin()) == Instruction::JUMPDEST)
 						{
 							bb_ptr->bbs_to.push_back(next_bb);
@@ -896,14 +914,17 @@ namespace dev
 
 					else if (ternimator == Instruction::JUMPI)
 					{
-						uint64_t jump_pc = stk_ptr->back();
-						stk_ptr->pop_back();
-						stk_ptr->pop_back();
+						uint64_t jump_pc = stk_ptr->empty() ? 0 : stk_ptr->back();
+						if (!stk_ptr->empty())
+							stk_ptr->pop_back();
+						if (!stk_ptr->empty())
+							stk_ptr->pop_back();
 
 						// fallout
 						uint64_t fallout_pc = pc + 1;
-						BasicBlock *fallout_bb = idxMap[fallout_pc];
-						if (static_cast<uint32_t>(*fallout_bb->begin()) != 0xfe)
+						auto falloutIt = idxMap.find(fallout_pc);
+						BasicBlock *fallout_bb = falloutIt == idxMap.end() ? nullptr : falloutIt->second;
+						if (fallout_bb && static_cast<uint32_t>(*fallout_bb->begin()) != 0xfe)
 						{
 							bb_ptr->bbs_to.push_back(fallout_bb);
 							fallout_bb->bbs_from.push_back(bb_ptr);
@@ -923,7 +944,8 @@ namespace dev
 						
 						std::cerr << "JUMPI-next\n";
 						// jump
-						BasicBlock *jump_bb = idxMap[jump_pc];
+						auto jumpIt = idxMap.find(jump_pc);
+						BasicBlock *jump_bb = jumpIt == idxMap.end() ? nullptr : jumpIt->second;
 						if (jump_bb && Instruction(*jump_bb->begin()) == Instruction::JUMPDEST)
 						{
 

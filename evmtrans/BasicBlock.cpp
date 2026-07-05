@@ -327,6 +327,8 @@ llvm::Value* GlobalStack::pop()
 	llvm::Value* item;
 	if (enableRegs)
 	{
+		if (m_local.empty())
+			return llvm::ConstantInt::get(Type::Int256Ty, 0);
 		item = *(m_local.rbegin());
 		m_local.pop_back();
 	}
@@ -357,7 +359,11 @@ void GlobalStack::dup(size_t _index)
 {	
 	if (enableRegs)
 	{
-		assert(_index < m_local.size());
+		if (_index >= m_local.size())
+		{
+			m_local.push_back(llvm::ConstantInt::get(Type::Int256Ty, 0));
+			return;
+		}
 		llvm::Value* tmp = *(m_local.rbegin() + _index); // count from back
 		m_local.push_back(tmp);
 	}
@@ -373,6 +379,12 @@ void GlobalStack::swap(size_t _index)
 
 	if (enableRegs)
 	{	
+		if (m_local.size() <= _index + 1)
+		{
+			while (m_local.size() <= _index + 1)
+				m_local.push_back(llvm::ConstantInt::get(Type::Int256Ty, 0));
+			return;
+		}
 		llvm::Value* srcVal = *(m_local.rbegin() + _index + 1); // count from back
 		// std::cerr << "@srcVal = " 
 					// << llvm::dyn_cast<llvm::ConstantInt>(srcVal)->getSExtValue() << "\n";
