@@ -2,6 +2,56 @@ include(ExternalProject)
 
 message(STATUS "LLD: Using LLVMConfig.cmake in: ${LLVM_DIR}")
 message(STATUS "LLD: Using llvm-config in: ${LLVM_CONFIG}")
+
+if (EVMTRANS_USE_SYSTEM_LLVM)
+    get_filename_component(LLVM_ROOT_DIR "${LLVM_DIR}/../../.." ABSOLUTE)
+    set(LLD_SEARCH_LIBRARY_DIRS
+        ${LLVM_LIBRARY_DIRS}
+        ${LLVM_ROOT_DIR}/lib
+    )
+    set(LLD_SEARCH_INCLUDE_DIRS
+        ${LLVM_INCLUDE_DIRS}
+        ${LLVM_ROOT_DIR}/include
+    )
+
+    find_path(LLD_INCLUDE_DIR lld/Common/Driver.h
+        PATHS ${LLD_SEARCH_INCLUDE_DIRS}
+        NO_DEFAULT_PATH
+    )
+    find_path(LLD_INCLUDE_DIR lld/Common/Driver.h)
+
+    set(LLD_LIBRARY_NAMES
+        lldWasm
+        lldReaderWriter
+        lldDriver
+        lldCore
+        lldCommon
+    )
+
+    set(LLD_LIBRARIES "")
+    foreach(LLD_LIBRARY_NAME ${LLD_LIBRARY_NAMES})
+        find_library(${LLD_LIBRARY_NAME}_LIBRARY
+            NAMES ${LLD_LIBRARY_NAME}
+            PATHS ${LLD_SEARCH_LIBRARY_DIRS}
+            NO_DEFAULT_PATH
+        )
+        find_library(${LLD_LIBRARY_NAME}_LIBRARY NAMES ${LLD_LIBRARY_NAME})
+        if (NOT ${LLD_LIBRARY_NAME}_LIBRARY)
+            message(FATAL_ERROR "Could not find ${LLD_LIBRARY_NAME}; install the matching LLD development package")
+        endif()
+        list(APPEND LLD_LIBRARIES ${${LLD_LIBRARY_NAME}_LIBRARY})
+    endforeach()
+
+    if (NOT LLD_INCLUDE_DIR)
+        message(FATAL_ERROR "Could not find LLD headers; install the matching LLD development package")
+    endif()
+
+    add_library(lld::lld INTERFACE IMPORTED)
+    set_property(TARGET lld::lld PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${LLD_INCLUDE_DIR})
+    set_property(TARGET lld::lld PROPERTY INTERFACE_LINK_LIBRARIES "${LLD_LIBRARIES}")
+    return()
+endif()
+
 set(LLVM_DIR "${CMAKE_BINARY_DIR}/deps")
 set(LLVM_CONFIG "${LLVM_DIR}/bin/llvm-config")
 

@@ -6,6 +6,37 @@
 #
 # Creates a target representing all required LLVM libraries and include path.
 function(configure_llvm_project)
+    option(EVMTRANS_USE_SYSTEM_LLVM "Use LLVM from the system instead of building the pinned source archive" OFF)
+
+    if (EVMTRANS_USE_SYSTEM_LLVM)
+        find_package(LLVM 10 REQUIRED CONFIG)
+
+        message(STATUS "Using system LLVM ${LLVM_PACKAGE_VERSION} in: ${LLVM_DIR}")
+
+        find_program(LLVM_CONFIG_EXECUTABLE
+            NAMES llvm-config-${LLVM_VERSION_MAJOR} llvm-config
+            PATHS ${LLVM_TOOLS_BINARY_DIR}
+            NO_DEFAULT_PATH
+        )
+        find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${LLVM_VERSION_MAJOR} llvm-config)
+        if (NOT LLVM_CONFIG_EXECUTABLE)
+            message(FATAL_ERROR "Could not find llvm-config for system LLVM")
+        endif()
+
+        execute_process(
+            COMMAND ${LLVM_CONFIG_EXECUTABLE} --ldflags --libs mcjit ipo all-targets lto option --system-libs
+            OUTPUT_VARIABLE LLVM_LINK_FLAGS
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+        separate_arguments(LLVM_LINK_FLAGS UNIX_COMMAND "${LLVM_LINK_FLAGS}")
+
+        add_library(LLVM::JIT INTERFACE IMPORTED)
+        set_property(TARGET LLVM::JIT PROPERTY INTERFACE_COMPILE_OPTIONS ${LLVM_DEFINITIONS})
+        set_property(TARGET LLVM::JIT PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${LLVM_INCLUDE_DIRS})
+        set_property(TARGET LLVM::JIT PROPERTY INTERFACE_LINK_LIBRARIES "${LLVM_LINK_FLAGS}")
+        return()
+    endif()
+
     # Generated with `llvm-config --libs mcjit ipo all-targets lto option`
     set(LIBS
         LLVMXCoreDisassembler LLVMXCoreCodeGen LLVMXCoreDesc LLVMXCoreInfo LLVMX86Disassembler LLVMX86AsmParser LLVMX86CodeGen LLVMX86Desc LLVMX86Utils LLVMX86Info LLVMWebAssemblyDisassembler LLVMWebAssemblyCodeGen LLVMWebAssemblyDesc LLVMWebAssemblyAsmParser LLVMWebAssemblyInfo LLVMSystemZDisassembler LLVMSystemZCodeGen LLVMSystemZAsmParser LLVMSystemZDesc LLVMSystemZInfo LLVMSparcDisassembler LLVMSparcCodeGen LLVMSparcAsmParser LLVMSparcDesc LLVMSparcInfo LLVMRISCVDisassembler LLVMRISCVCodeGen LLVMRISCVAsmParser LLVMRISCVDesc LLVMRISCVUtils LLVMRISCVInfo LLVMPowerPCDisassembler LLVMPowerPCCodeGen LLVMPowerPCAsmParser LLVMPowerPCDesc LLVMPowerPCInfo LLVMNVPTXCodeGen LLVMNVPTXDesc LLVMNVPTXInfo LLVMMSP430Disassembler LLVMMSP430CodeGen LLVMMSP430AsmParser LLVMMSP430Desc LLVMMSP430Info LLVMMipsDisassembler LLVMMipsCodeGen LLVMMipsAsmParser LLVMMipsDesc LLVMMipsInfo LLVMLanaiDisassembler LLVMLanaiCodeGen LLVMLanaiAsmParser LLVMLanaiDesc LLVMLanaiInfo LLVMHexagonDisassembler LLVMHexagonCodeGen LLVMHexagonAsmParser LLVMHexagonDesc LLVMHexagonInfo LLVMBPFDisassembler LLVMBPFCodeGen LLVMBPFAsmParser LLVMBPFDesc LLVMBPFInfo LLVMARMDisassembler LLVMARMCodeGen LLVMARMAsmParser LLVMARMDesc LLVMARMUtils LLVMARMInfo LLVMAMDGPUDisassembler LLVMAMDGPUCodeGen LLVMMIRParser LLVMAMDGPUAsmParser LLVMAMDGPUDesc LLVMAMDGPUUtils LLVMAMDGPUInfo LLVMAArch64Disassembler LLVMMCDisassembler LLVMAArch64CodeGen LLVMCFGuard LLVMGlobalISel LLVMSelectionDAG LLVMAsmPrinter LLVMDebugInfoDWARF LLVMAArch64AsmParser LLVMAArch64Desc LLVMAArch64Utils LLVMAArch64Info LLVMMCJIT LLVMExecutionEngine LLVMRuntimeDyld LLVMLTO LLVMPasses LLVMObjCARCOpts LLVMipo LLVMInstrumentation LLVMVectorize LLVMLinker LLVMIRReader LLVMAsmParser LLVMCodeGen LLVMTarget LLVMScalarOpts LLVMInstCombine LLVMBitWriter LLVMAggressiveInstCombine LLVMTransformUtils LLVMAnalysis LLVMProfileData LLVMObject LLVMTextAPI LLVMMCParser LLVMMC LLVMDebugInfoCodeView LLVMDebugInfoMSF LLVMBitReader LLVMCore LLVMRemarks LLVMBitstreamReader LLVMBinaryFormat LLVMSupport LLVMDemangle LLVMOption

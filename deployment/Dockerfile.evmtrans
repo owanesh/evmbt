@@ -1,0 +1,56 @@
+FROM ubuntu:20.04 AS build
+
+ARG BUILD_PARALLEL_JOBS=4
+ARG DEBIAN_FRONTEND=noninteractive
+ENV BUILD_PARALLEL_JOBS=${BUILD_PARALLEL_JOBS}
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    bash \
+    ca-certificates \
+    cmake \
+    curl \
+    g++ \
+    gcc \
+    git \
+    libc6-dev \
+    liblld-10-dev \
+    llvm-10-dev \
+    make \
+    perl \
+    python-is-python3 \
+    python3 \
+    tar \
+    xz-utils \
+    zlib1g-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
+COPY . .
+
+RUN cmake -S . -B /build \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DEVMTRANS_USE_SYSTEM_LLVM=ON \
+    -DLLVM_DIR=/usr/lib/llvm-10/lib/cmake/llvm \
+    -DHERA_WABT=ON \
+    -DHERA_BINARYEN=OFF \
+    -DHERA_WAVM=OFF
+
+RUN cmake --build /build --target standalone-evmtrans -- -j${BUILD_PARALLEL_JOBS}
+
+RUN install -Dm755 /build/evmtrans/standalone-evmtrans /opt/ethsema/bin/standalone-evmtrans
+
+FROM ubuntu:20.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libgcc-s1 libllvm10 libstdc++6 && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /opt/ethsema /opt/ethsema
+
+ENV PATH="/opt/ethsema/bin:${PATH}"
+WORKDIR /work
+
+ENTRYPOINT ["standalone-evmtrans"]

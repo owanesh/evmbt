@@ -212,13 +212,11 @@ int main(int argc, char** argv) {
     // ewasm
     auto DModulePtr = std::make_unique<llvm::Module>("deploy", LLVMCtx);
     llvm::Module &DMod = *DModulePtr.get();
-    dev::eth::trans::WASMCompiler DeployerCC(DMod, EntireBytecode, RETURNPC);
+    llvm::StringRef RtWasmCode((char*)runtimeCodeGen->getCode(), runtimeCodeGen->getCodeSize());
+    dev::eth::trans::WASMCompiler DeployerCC(DMod, EntireBytecode, RETURNPC, RtWasmCode);
     DeployerCC.compileMain(DeployerBytecode, "main");
     std::cerr << "\n[+] code gen\n";
-    
-    llvm::StringRef RtWasmCode((char*)runtimeCodeGen->getCode(), runtimeCodeGen->getCodeSize());
-    // std::string RtWasmCode(runtimeCodeGen->getCode(), runtimeCodeGen->getCode() + runtimeCodeGen->getCodeSize());
-    DeployerCC.FixEwasmDeployer(RtWasmCode);
+
     dev::eth::trans::prepare(DMod, options);
 
     if (g_dump) exportIR("./res.ll", DMod);
