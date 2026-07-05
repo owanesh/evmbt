@@ -50,6 +50,8 @@ cl::opt<bool> g_enableUpgrade{"enable-upgrade", cl::desc{"enable create2-based P
 
 
 cl::opt<bool> g_onlyRt{"onlyRt", cl::desc{"only transalte the Runtime Code"}};
+cl::opt<bool> g_runtimeInput{
+    "runtime-input", cl::desc{"treat the input as runtime bytecode without deployment code"}};
 cl::opt<int> g_vulpc{"vulPC", cl::desc{"the PC of the vulnerable Opcode"}};
 
 cl::opt<int> g_enableKlee{"enableKlee", cl::desc{"build Klee symbilic input"}};
@@ -122,6 +124,9 @@ int main(int argc, char** argv) {
     
     using clock = std::chrono::high_resolution_clock;
     auto startTime = clock::now();
+    constexpr auto to_us_str = [](clock::duration d) {
+        return std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(d).count());
+    };
 
     cl::ParseCommandLineOptions(argc, argv, "Ethereum EVM to EWASM Binary Translator\n");
 
@@ -149,25 +154,32 @@ int main(int argc, char** argv) {
     auto code_start = (uint8_t*)const_cast<char*>(Buffer.data());
     
     uint64_t RETURNPC = 0;
-    int64_t splitPoint = dev::eth::trans::splitCode(code_start, code_start + Buffer.size(), RETURNPC);
-    if (splitPoint == -1) {
-        std::cerr << "[-] Fatal Error. Cannot split runtime code.\n";
-        return -1;
+    int64_t splitPoint = 0;
+    if (!g_runtimeInput) {
+        splitPoint = dev::eth::trans::splitCode(code_start, code_start + Buffer.size(), RETURNPC);
+        if (splitPoint == -1) {
+            std::cerr << "[-] Fatal Error. Cannot split runtime code.\n";
+            return -1;
+        }
     }
 
     if (g_debug) {
         std::cerr << "split Point=" << splitPoint << std::dec;
         std::cerr << "\n; size=" << Buffer.size() << "\n";
-        std::cerr << " ; RETURNPC=" << RETURNPC << "\n";
-        std::cerr << "======================= Split out =======================\n";
-        std::cerr << "-----Runtime EVM Code:\n";
-        for (auto i = splitPoint; i < Buffer.size(); i++)
-            std::cerr << std::hex << (int)(*(code_start + i)) << " ";
+        if (g_runtimeInput) {
+            std::cerr << "runtime-input mode; size=" << Buffer.size() << "\n";
+        } else {
+            std::cerr << " ; RETURNPC=" << RETURNPC << "\n";
+            std::cerr << "======================= Split out =======================\n";
+            std::cerr << "-----Runtime EVM Code:\n";
+            for (auto i = splitPoint; i < Buffer.size(); i++)
+                std::cerr << std::hex << (int)(*(code_start + i)) << " ";
 
-        std::cerr << "\n-----Deploy EVM Code:\n";
-        for (auto i = 0; i < splitPoint; i++)
-            std::cerr << std::hex << (int)(*(code_start + i)) << " ";
-        std::cerr << "\n=======================================================\n";
+            std::cerr << "\n-----Deploy EVM Code:\n";
+            for (auto i = 0; i < splitPoint; i++)
+                std::cerr << std::hex << (int)(*(code_start + i)) << " ";
+            std::cerr << "\n=======================================================\n";
+        }
         std::cerr << "\n[+] ====================== Compile Runtime Code ====================\n";
     }
     
@@ -205,6 +217,21 @@ int main(int argc, char** argv) {
         rtfile << "\0";
         rtfile.close();
     }
+    if (g_runtimeInput) {
+        if (OutputFilename == "-") OutputFilename = "./runtime.wasm";
+        std::ofstream ofp;
+        ofp.open(OutputFilename, std::ios::out | std::ios::binary | std::ios::trunc);
+        auto code = runtimeCodeGen->getCode();
+        for (size_t i = 0; i < runtimeCodeGen->getCodeSize(); i++)
+        {
+            ofp << code[i];
+        }
+        ofp << "\0";
+        ofp.close();
+        std::cerr << "Runtime bytecode size: " << runtimeCodeGen->getCodeSize() << "B \n";
+        std::cout << "Translation Complete. Time [us]: " << to_us_str(clock::now() - startTime) << "\n";
+        return 0;
+    }
     if (g_onlyRt)   return 0;
 
     if (g_debug) std::cerr << "\n[+] =========== Compile deploy Code ==========\n";
@@ -236,10 +263,6 @@ int main(int argc, char** argv) {
     ofp.close();
     std::cerr << "Bytecode size: " << deployCodeGen->getCodeSize() << "B \n";
     
-    // Convert duration to string with microsecond units.
-    constexpr auto to_us_str = [](clock::duration d) {
-        return std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(d).count());
-    };
     std::cout << "Translation Complete. Time [us]: " << to_us_str(clock::now() - startTime) << "\n";
 
     return 0;
