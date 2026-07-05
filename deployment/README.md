@@ -108,6 +108,136 @@ docker run --rm -v "$PWD:/work" -w /work ethsema-evmtrans .tmp.bin --dump --only
 
 That writes `runtime.wasm` and `rt.ll` in the mounted working directory.
 
+If the input is already EVM runtime bytecode and does not include deployment
+code, skip the deployment split with:
+
+```sh
+docker run --rm -v "$PWD:/work" -w /work ethsema-evmtrans runtime.bin --runtime-input -o runtime.wasm
+```
+
+This mode writes the converted runtime Wasm directly to the output path passed
+with `-o`; it does not build a deployment wrapper.
+
+## Runtime Bytecode Dataset
+
+For a dataset text file, use one EVM runtime bytecode per line. The `0x` prefix
+is optional. Empty lines and invalid hex lines are counted separately.
+
+Build the converter image first:
+
+```sh
+docker build -f deployment/Dockerfile.evmtrans -t ethsema-evmtrans .
+```
+
+Run a quick smoke test on the first 20 bytecodes:
+
+```sh
+docker run --rm \
+  -v "$PWD:/work" \
+  -e DATASET=/work/path/to/bytecodes.txt \
+  -e LIMIT=20 \
+  -e TIMEOUT=20 \
+  -e JOBS=4 \
+  -w /tmp \
+  --entrypoint sh \
+  ethsema-evmtrans \
+  /work/deployment/bulk.sh
+```
+
+Run the full dataset by setting `LIMIT=0` and increasing `JOBS` if the machine
+has enough CPU and memory:
+
+```sh
+docker run --rm \
+  -v "$PWD:/work" \
+  -e DATASET=/work/path/to/bytecodes.txt \
+  -e LIMIT=0 \
+  -e TIMEOUT=20 \
+  -e JOBS=8 \
+  -w /tmp \
+  --entrypoint sh \
+  ethsema-evmtrans \
+  /work/deployment/bulk.sh
+```
+
+The final line has this shape:
+
+```text
+FINAL total=3458 ok=3458 fail=0 timeout=0 runtime_fail=0 invalid=0 empty=0 jobs=8 timeout_s=20 output_dir=none
+```
+
+Arguments are:
+
+```text
+DATASET: dataset path inside the container
+LIMIT: number of valid non-empty lines to test; 0 means all
+TIMEOUT: per-contract timeout in seconds
+JOBS: parallel jobs
+OUT: optional output directory inside the container
+```
+
+When `OUT` is set, generated Wasm files are named:
+
+```text
+<dataset-line-number>_<sha256-normalized-bytecode>.wasm
+```
+
+For example:
+
+```text
+42_8f4e2c6a0f1c...9b7d.wasm
+```
+
+The line number is the original 1-based line number in the dataset file. The
+hash is SHA-256 of the normalized bytecode string after removing an optional
+`0x` prefix and whitespace.
+
+If the dataset is outside the repository, mount its directory separately:
+
+```sh
+docker run --rm \
+  -v "$PWD:/work" \
+  -v "/absolute/path/to/dataset-dir:/data:ro" \
+  -e DATASET=/data/bytecodes.txt \
+  -e LIMIT=0 \
+  -e TIMEOUT=20 \
+  -e JOBS=8 \
+  -w /tmp \
+  --entrypoint sh \
+  ethsema-evmtrans \
+  /work/deployment/bulk.sh
+```
+
+To keep the generated Wasm files, mount an output directory and set `OUT`:
+
+```sh
+mkdir -p dataset-wasm
+
+docker run --rm \
+  -v "$PWD:/work" \
+  -v "$PWD/dataset-wasm:/out" \
+  -e DATASET=/work/path/to/bytecodes.txt \
+  -e LIMIT=0 \
+  -e TIMEOUT=20 \
+  -e JOBS=8 \
+  -e OUT=/out \
+  -w /tmp \
+  --entrypoint sh \
+  ethsema-evmtrans \
+  /work/deployment/bulk.sh
+```
+
+Validate saved outputs with WABT:
+
+```sh
+for f in dataset-wasm/*.wasm; do
+  wasm-validate "$f" || exit 1
+done
+```
+
+Use `-w /tmp` for dataset runs. `standalone-evmtrans` writes intermediate files
+in the current directory, so the working directory must be writable.
+
 ## Optional Compose Build
 
 If Docker Compose is available:
